@@ -1,0 +1,19 @@
+---
+name: Scan
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  cve-scanner:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run vulnerability scanner
+        if: github.event_name != 'release'
+        uses: aquasecurity/trivy-action@0.0.6
+        with:
+          image-ref: "nginx:latest"
+          format: "table"
+          exit-code: "1"
+          severity: "CRITICAL,HIGH"
