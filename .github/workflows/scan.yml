@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run vulnerability scanner
-        if: github.event_name != 'release'
         uses: aquasecurity/trivy-action@0.0.6
         with:
           image-ref: "nginx:latest"
