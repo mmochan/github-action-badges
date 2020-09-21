@@ -3,7 +3,7 @@ name: Scan
 
 on:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '1 * * * *'
 
 jobs:
   cve-scanner:
