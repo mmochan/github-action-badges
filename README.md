@@ -1,3 +1,3 @@
-![GitHub Workflow Status (event)](https://img.shields.io/github/workflow/status/mmochan/github-action-badges/Scan?label=Vulnerability%20Scanning&style=flat-square)
+![Vulnerability Scan](https://github.com/mmochan/github-action-badges/workflows/Scan/badge.svg)
 
 # github-action-badges
