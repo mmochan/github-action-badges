@@ -6,9 +6,10 @@
 {% assign entry = entries_hash[1] %}
   <li>
     <a href="https://github.com/{{ org.username }}">
-      {{ entry.name }}
+      {{ entry[0].name }}
+      {{ entry[0].version }}
     </a>
-    ({{ .index | size }} entry)
+    ({{ entry | size }} entry)
   </li>
 {% endfor %}
 {% endfor %}
