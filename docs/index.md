@@ -10,8 +10,8 @@
 
   <li>
     <a href="https://github.com/{{ org.username }}">
-      {{ helm['name'] }}
-      {{ helm['version'] }}
+      {{ helm.name }}
+      {{ helm.version }}
     </a>
     ({{ helm | size }} helm)
   </li>
