@@ -13,10 +13,10 @@
 {% assign helm_version = helm_version_hash[1] %}
   <li>
     <a href="https://github.com/{{ org.username }}">
-      {{ helm_version.name }}
-      {{ helm_version.version }}
+      {{ helm_version }}
+      <!-- {{ helm_version.version }} -->
     </a>
-    ({{ helm_version | size }} helm_version)
+    <!-- ({{ helm_version | size }} helm_version) -->
   </li>
 {% endfor %}
 {% endfor %}
