@@ -21,6 +21,7 @@ jobs:
         with:
           sarif_file: 'trivy-results.sarif'
 
+
 # env:
 #   RUNNER_IMAGE_NAME: opendatacube/geobase:runner
 # jobs:
