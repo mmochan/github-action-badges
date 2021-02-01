@@ -10,7 +10,7 @@ jobs:
         uses: aquasecurity/trivy-action@0.0.8
         continue-on-error: true
         with:
-          image-ref: "geoscienceaustralia/sandbox:sudo-latest"
+          image-ref: "opendatacube/ows:latest"
           format: 'template'
           template: '@/contrib/sarif.tpl'
           output: 'trivy-results.sarif'
@@ -20,6 +20,19 @@ jobs:
         uses: github/codeql-action/upload-sarif@v1
         with:
           sarif_file: 'trivy-results.sarif'
+
+      - name: Notify Slack for Failures
+        uses: rtCamp/action-slack-notify@v2.1.0
+        if: failure()
+        env:
+          SLACK_CHANNEL: ga-wms-ops
+          SLACK_ICON: "https://github.com/docker.png?size=48"
+          SLACK_COLOR: "#482de1"
+          SLACK_MESSAGE: ""
+          SLACK_TITLE: CVE Scan alert
+          SLACK_USERNAME: datacube-ows scanner
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
 
 
 # env:
