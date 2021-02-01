@@ -35,21 +35,31 @@ jobs:
           SLACK_USERNAME: datacube-ows scanner
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
-      - name: Run vulnerability scanner
-        uses: aquasecurity/trivy-action@0.0.8
-        continue-on-error: true
-        with:
-          image-ref: opendatacube/ows:1.8.2-89-g995e340
-          format: 'template'
-          template: '@/contrib/sarif.tpl'
-          output: 'trivy-results.sarif'
-          exit-code: "1"
-          severity: "CRITICAL,HIGH"
+      - name: steps
+        id: steps_id
+        env:
+          STEPS_CONTEXT: ${{ toJson(steps) }}
+        run: echo "$STEPS_CONTEXT"
 
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v1
-        with:
-          sarif_file: 'trivy-results.sarif'
+      - name: Check on failures
+        if: steps.runner.outcome != 'success'
+        run: exit 1
+
+      # - name: Run vulnerability scanner
+      #   uses: aquasecurity/trivy-action@0.0.8
+      #   continue-on-error: true
+      #   with:
+      #     image-ref: opendatacube/ows:1.8.2-89-g995e340
+      #     format: 'template'
+      #     template: '@/contrib/sarif.tpl'
+      #     output: 'trivy-results.sarif'
+      #     exit-code: "1"
+      #     severity: "CRITICAL,HIGH"
+
+      # - name: Upload Trivy scan results to GitHub Security tab
+      #   uses: github/codeql-action/upload-sarif@v1
+      #   with:
+      #     sarif_file: 'trivy-results.sarif'
 
       # - name: Notify Slack for Failures
       #   uses: rtCamp/action-slack-notify@v2.1.0
