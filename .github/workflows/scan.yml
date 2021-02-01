@@ -10,7 +10,7 @@ jobs:
         uses: aquasecurity/trivy-action@0.0.8
         continue-on-error: true
         with:
-          image-ref: "opendatacube/ows:latest"
+          image-ref: opendatacube/ows:1.8.2-89-g995e340
           format: 'template'
           template: '@/contrib/sarif.tpl'
           output: 'trivy-results.sarif'
