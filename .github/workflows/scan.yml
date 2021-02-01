@@ -26,6 +26,7 @@ jobs:
       - name: Notify Slack for Failures
         uses: rtCamp/action-slack-notify@v2.1.2
         if: steps.runner.outcome != 'success'
+        id: slack
         env:
           SLACK_CHANNEL: ga-wms-ops
           SLACK_ICON: "https://github.com/docker.png?size=48"
