@@ -8,7 +8,7 @@ jobs:
     steps:
       - name: Run vulnerability scanner
         uses: aquasecurity/trivy-action@0.0.8
-        continue-on-error: true
+        # continue-on-error: true
         with:
           image-ref: opendatacube/ows:1.8.2-89-g995e340
           format: "table"
@@ -17,7 +17,7 @@ jobs:
 
       - name: Notify Slack for Failures
         uses: rtCamp/action-slack-notify@v2.1.2
-        if: failure()
+        # if: failure()
         env:
           SLACK_CHANNEL: ga-wms-ops
           SLACK_ICON: "https://github.com/docker.png?size=48"
@@ -29,7 +29,7 @@ jobs:
 
       - name: Run vulnerability scanner
         uses: aquasecurity/trivy-action@0.0.8
-        continue-on-error: true
+        # continue-on-error: true
         with:
           image-ref: opendatacube/ows:1.8.2-89-g995e340
           format: 'template'
