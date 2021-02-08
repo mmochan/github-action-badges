@@ -20,16 +20,9 @@ jobs:
         id: builder_scan
         with:
           image-ref: "${{ env.BUILDER_IMAGE_NAME }}"
-          format: "template"
-          template: '@/contrib/gitlab.tpl'
-          output: 'trivy-results.json'
+          format: "table"
+          exit-code: "1"
           severity: "CRITICAL,HIGH"
-
-      - name: Read trivy-results
-        id: builder_package
-        uses: juliangruber/read-file-action@v1
-        with:
-          path: ./trivy-results.json
 
       - name: Notify Slack for Failures
         uses: rtCamp/action-slack-notify@v2.1.0
@@ -39,7 +32,7 @@ jobs:
           SLACK_CHANNEL: ga-wms-ops
           SLACK_ICON: "https://github.com/docker.png?size=48"
           SLACK_COLOR: "#482de1"
-          SLACK_MESSAGE: ${{join(steps.package.outputs.content, '\n')}}
+          SLACK_MESSAGE: GEOBASE Builder Scan failure
           SLACK_TITLE: CVE Scan alert
           SLACK_USERNAME: GEOBASE Builder Scan
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
@@ -56,16 +49,9 @@ jobs:
         id: runner_scan
         with:
           image-ref: "${{ env.RUNNER_IMAGE_NAME }}"
-          format: "template"
-          template: '@/contrib/gitlab.tpl'
-          output: 'trivy-results.json'
+          format: "table"
+          exit-code: "1"
           severity: "CRITICAL,HIGH"
-
-      - name: Read trivy-results
-        id: runner_package
-        uses: juliangruber/read-file-action@v1
-        with:
-          path: ./trivy-results.json
 
       - name: Notify Slack for Failures
         uses: rtCamp/action-slack-notify@v2.1.0
@@ -75,7 +61,7 @@ jobs:
           SLACK_CHANNEL: ga-wms-ops
           SLACK_ICON: "https://github.com/docker.png?size=48"
           SLACK_COLOR: "#482de1"
-          SLACK_MESSAGE: ${{join(steps.package.outputs.content, '\n')}}
+          SLACK_MESSAGE: Geobase Runner Scan failure
           SLACK_TITLE: CVE Scan alert
           SLACK_USERNAME: GEOBASE Runner Scan
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
@@ -92,16 +78,9 @@ jobs:
         id: wheels_scan
         with:
           image-ref: "${{ env.WHEELS_IMAGE_NAME }}"
-          format: "template"
-          template: '@/contrib/gitlab.tpl'
-          output: 'trivy-results.json'
+          format: "table"
+          exit-code: "1"
           severity: "CRITICAL,HIGH"
-
-      - name: Read trivy-results
-        id: wheels_package
-        uses: juliangruber/read-file-action@v1
-        with:
-          path: ./trivy-results.json
 
       - name: Notify Slack for Failures
         uses: rtCamp/action-slack-notify@v2.1.0
@@ -111,7 +90,7 @@ jobs:
           SLACK_CHANNEL: ga-wms-ops
           SLACK_ICON: "https://github.com/docker.png?size=48"
           SLACK_COLOR: "#482de1"
-          SLACK_MESSAGE: ${{join(steps.package.outputs.content, '\n')}}
+          SLACK_MESSAGE: Geobase Wheels Scan failure
           SLACK_TITLE: CVE Scan alert
           SLACK_USERNAME: GEOBASE Wheels Scan
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
