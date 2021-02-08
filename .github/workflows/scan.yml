@@ -4,7 +4,7 @@ on: [push, pull_request]
 env:
   BUILDER_IMAGE_NAME: opendatacube/geobase:builder
   RUNNER_IMAGE_NAME: opendatacube/geobase:runner
-  RUNNER_IMAGE_NAME: opendatacube/geobase:wheels
+  WHEELS_IMAGE_NAME: opendatacube/geobase:wheels
 jobs:
   cve-scanner:
     runs-on: ubuntu-latest
