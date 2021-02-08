@@ -50,3 +50,9 @@ jobs:
           SLACK_TITLE: GEOBASE Runner CVE Scan alert
           SLACK_USERNAME: GEOBASE Runner Scan
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+      - name: steps
+        id: steps_id
+        env:
+          STEPS_CONTEXT: ${{ toJson(steps) }}
+        run: echo "$STEPS_CONTEXT"
