@@ -40,8 +40,7 @@ jobs:
 
       - name: Notify Slack for Failures
         uses: rtCamp/action-slack-notify@v2.1.0
-        # if: failure()
-        if: steps.wheels_github_scan.outcome != 'success'
+        if: failure()
         id: wheels_slack
         env:
           SLACK_CHANNEL: ga-wms-ops
