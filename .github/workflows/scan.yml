@@ -8,7 +8,7 @@ env:
 jobs:
   cve-scanner:
     runs-on: ubuntu-latest
-# Builder
+    steps:
       - name: pull the images
         id: builder_docker_pull
         run: |
@@ -44,8 +44,8 @@ jobs:
           SLACK_TITLE: CVE Scan alert
           SLACK_USERNAME: GEOBASE Scanner
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-# Runner
-    steps:
+
+
       - name: pull the images
         id: runner_docker_pull
         run: |
@@ -82,7 +82,7 @@ jobs:
           SLACK_USERNAME: GEOBASE Scanner
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
-# Wheels
+
       - name: pull the images
         id: wheels_docker_pull
         run: |
