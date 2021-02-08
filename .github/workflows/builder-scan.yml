@@ -28,19 +28,20 @@ jobs:
         with:
           sarif_file: 'trivy-results.sarif'
 
-      - name: Run vulnerability scanner
-        if: github.event_name != 'release'
-        uses: aquasecurity/trivy-action@0.0.8
-        id: builder_trivy_scan
-        with:
-          image-ref: "${{ env.BUILDER_IMAGE_NAME }}"
-          format: "table"
-          exit-code: "1"
-          severity: "CRITICAL,HIGH"
+      # - name: Run vulnerability scanner
+      #   if: github.event_name != 'release'
+      #   uses: aquasecurity/trivy-action@0.0.8
+      #   id: builder_trivy_scan
+      #   with:
+      #     image-ref: "${{ env.BUILDER_IMAGE_NAME }}"
+      #     format: "table"
+      #     exit-code: "1"
+      #     severity: "CRITICAL,HIGH"
 
       - name: Notify Slack for Failures
         uses: rtCamp/action-slack-notify@v2.1.0
         if: failure()
+        if: steps.builder_github_scan.outcome != 'success'
         id: builder_slack
         env:
           SLACK_CHANNEL: ga-wms-ops

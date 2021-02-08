@@ -1,4 +1,4 @@
-name: Runner Scanner
+name: Runner Scan
 
 on: [push, pull_request]
 env:
@@ -28,19 +28,20 @@ jobs:
         with:
           sarif_file: 'trivy-results.sarif'
 
-      - name: Run vulnerability scanner
-        if: github.event_name != 'release'
-        uses: aquasecurity/trivy-action@0.0.8
-        id: runner_trivy_scan
-        with:
-          image-ref: "${{ env.RUNNER_IMAGE_NAME }}"
-          format: "table"
-          exit-code: "1"
-          severity: "CRITICAL,HIGH"
+      # - name: Run vulnerability scanner
+      #   if: github.event_name != 'release'
+      #   uses: aquasecurity/trivy-action@0.0.8
+      #   id: runner_trivy_scan
+      #   with:
+      #     image-ref: "${{ env.RUNNER_IMAGE_NAME }}"
+      #     format: "table"
+      #     exit-code: "1"
+      #     severity: "CRITICAL,HIGH"
 
       - name: Notify Slack for Failures
         uses: rtCamp/action-slack-notify@v2.1.0
-        if: failure()
+        # if: failure()
+        if: steps.runner_github_scan.outcome != 'success'
         id: runner_slack
         env:
           SLACK_CHANNEL: ga-wms-ops
