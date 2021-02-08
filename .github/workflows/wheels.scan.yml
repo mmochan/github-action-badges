@@ -1,0 +1,52 @@
+name: Wheels Scan
+
+on: [push, pull_request]
+env:
+  WHEELS_IMAGE_NAME: opendatacube/geobase:wheels
+jobs:
+  wheels-cve-scanner:
+    runs-on: ubuntu-latest
+    steps:
+      - name: pull the builder image
+        id: builder_docker_pull
+        run: |
+          docker pull "${{ env.BUILDER_IMAGE_NAME }}"
+
+      - name: Run vulnerability scanner
+        if: github.event_name != 'release'
+        uses: aquasecurity/trivy-action@0.0.8
+        id: builder_github_scan
+        with:
+          image-ref: "${{ env.BUILDER_IMAGE_NAME }}"
+          format: 'template'
+          template: '@/contrib/sarif.tpl'
+          output: 'trivy-results.sarif'
+          severity: "CRITICAL,HIGH"
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+      - name: Run vulnerability scanner
+        if: github.event_name != 'release'
+        uses: aquasecurity/trivy-action@0.0.8
+        id: builder_trivy_scan
+        with:
+          image-ref: "${{ env.BUILDER_IMAGE_NAME }}"
+          format: "table"
+          exit-code: "1"
+          severity: "CRITICAL,HIGH"
+
+      - name: Notify Slack for Failures
+        uses: rtCamp/action-slack-notify@v2.1.0
+        if: failure()
+        id: builder_slack
+        env:
+          SLACK_CHANNEL: ga-wms-ops
+          SLACK_ICON: "https://github.com/docker.png?size=48"
+          SLACK_COLOR: "#482de1"
+          SLACK_MESSAGE: GEOBASE Wheels Scan failure
+          SLACK_TITLE: CVE Scan alert
+          SLACK_USERNAME: GEOBASE Wheels Scan
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
