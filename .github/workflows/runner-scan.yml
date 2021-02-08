@@ -10,7 +10,7 @@ jobs:
       - name: pull the builder image
         id: builder_docker_pull
         run: |
-          docker pull "${{ env.BUILDER_IMAGE_NAME }}"
+          docker pull "${{ env.RUNNER_IMAGE_NAME }}"
 
       - name: Run vulnerability scanner
         if: github.event_name != 'release'
