@@ -46,7 +46,7 @@ jobs:
           SLACK_CHANNEL: ga-wms-ops
           SLACK_ICON: "https://github.com/docker.png?size=48"
           SLACK_COLOR: "#482de1"
-          SLACK_MESSAGE: https://github.com/mmochan/github-action-badges/security/code-scanning
+          SLACK_MESSAGE: 'https://github.com/mmochan/github-action-badges/security/code-scanning :boom:'
           SLACK_TITLE: GEOBASE Runner CVE Scan alert
           SLACK_USERNAME: GEOBASE Runner Scan
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
