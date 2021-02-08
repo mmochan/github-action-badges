@@ -17,7 +17,6 @@ jobs:
       - name: Run vulnerability scanner
         if: github.event_name != 'release'
         uses: aquasecurity/trivy-action@0.0.8
-        continue-on-error: true
         id: builder_scan
         with:
           image-ref: "${{ env.BUILDER_IMAGE_NAME }}"
@@ -42,7 +41,7 @@ jobs:
           SLACK_COLOR: "#482de1"
           SLACK_MESSAGE: ${{join(steps.package.outputs.content, '\n')}}
           SLACK_TITLE: CVE Scan alert
-          SLACK_USERNAME: GEOBASE Scanner
+          SLACK_USERNAME: GEOBASE Builder Scan
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
 
@@ -54,7 +53,6 @@ jobs:
       - name: Run vulnerability scanner
         if: github.event_name != 'release'
         uses: aquasecurity/trivy-action@0.0.8
-        continue-on-error: true
         id: runner_scan
         with:
           image-ref: "${{ env.RUNNER_IMAGE_NAME }}"
@@ -79,7 +77,7 @@ jobs:
           SLACK_COLOR: "#482de1"
           SLACK_MESSAGE: ${{join(steps.package.outputs.content, '\n')}}
           SLACK_TITLE: CVE Scan alert
-          SLACK_USERNAME: GEOBASE Scanner
+          SLACK_USERNAME: GEOBASE Runner Scan
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
 
@@ -91,7 +89,6 @@ jobs:
       - name: Run vulnerability scanner
         if: github.event_name != 'release'
         uses: aquasecurity/trivy-action@0.0.8
-        continue-on-error: true
         id: wheels_scan
         with:
           image-ref: "${{ env.WHEELS_IMAGE_NAME }}"
@@ -116,14 +113,14 @@ jobs:
           SLACK_COLOR: "#482de1"
           SLACK_MESSAGE: ${{join(steps.package.outputs.content, '\n')}}
           SLACK_TITLE: CVE Scan alert
-          SLACK_USERNAME: GEOBASE Scanner
+          SLACK_USERNAME: GEOBASE Wheels Scan
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
-      - name: steps
-        id: steps_id
-        env:
-          STEPS_CONTEXT: ${{ toJson(steps) }}
-        run: echo "$STEPS_CONTEXT"
+      # - name: steps
+      #   id: steps_id
+      #   env:
+      #     STEPS_CONTEXT: ${{ toJson(steps) }}
+      #   run: echo "$STEPS_CONTEXT"
 
       # - name: Check on failures
       #   if: steps.runner.outcome != 'success'
