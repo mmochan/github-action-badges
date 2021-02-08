@@ -17,7 +17,21 @@ jobs:
       - name: Run vulnerability scanner
         if: github.event_name != 'release'
         uses: aquasecurity/trivy-action@0.0.8
-        continue-on-error: true
+        id: builder_scan
+        with:
+          image-ref: "${{ env.BUILDER_IMAGE_NAME }}"
+          format: 'template'
+          template: '@/contrib/sarif.tpl'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+      - name: Run vulnerability scanner
+        if: github.event_name != 'release'
+        uses: aquasecurity/trivy-action@0.0.8
         id: builder_scan
         with:
           image-ref: "${{ env.BUILDER_IMAGE_NAME }}"
@@ -27,7 +41,7 @@ jobs:
 
       - name: Notify Slack for Failures
         uses: rtCamp/action-slack-notify@v2.1.0
-        if: steps.runner.outcome != 'success'
+        if: failure()
         id: builder_slack
         env:
           SLACK_CHANNEL: ga-wms-ops
@@ -39,64 +53,64 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
 
-      - name: pull the runner image
-        id: runner_docker_pull
-        run: |
-          docker pull "${{ env.RUNNER_IMAGE_NAME }}"
+      # - name: pull the runner image
+      #   id: runner_docker_pull
+      #   run: |
+      #     docker pull "${{ env.RUNNER_IMAGE_NAME }}"
 
-      - name: Run vulnerability scanner
-        if: github.event_name != 'release'
-        uses: aquasecurity/trivy-action@0.0.8
-        continue-on-error: true
-        id: runner_scan
-        with:
-          image-ref: "${{ env.RUNNER_IMAGE_NAME }}"
-          format: "table"
-          exit-code: "1"
-          severity: "CRITICAL,HIGH"
+      # - name: Run vulnerability scanner
+      #   if: github.event_name != 'release'
+      #   uses: aquasecurity/trivy-action@0.0.8
+      #   continue-on-error: true
+      #   id: runner_scan
+      #   with:
+      #     image-ref: "${{ env.RUNNER_IMAGE_NAME }}"
+      #     format: "table"
+      #     exit-code: "1"
+      #     severity: "CRITICAL,HIGH"
 
-      - name: Notify Slack for Failures
-        uses: rtCamp/action-slack-notify@v2.1.0
-        if: steps.runner.outcome != 'success'
-        id: runner_slack
-        env:
-          SLACK_CHANNEL: ga-wms-ops
-          SLACK_ICON: "https://github.com/docker.png?size=48"
-          SLACK_COLOR: "#482de1"
-          SLACK_MESSAGE: Geobase Runner Scan failure
-          SLACK_TITLE: CVE Scan alert
-          SLACK_USERNAME: GEOBASE Runner Scan
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      # - name: Notify Slack for Failures
+      #   uses: rtCamp/action-slack-notify@v2.1.0
+      #   if: steps.runner.outcome != 'success'
+      #   id: runner_slack
+      #   env:
+      #     SLACK_CHANNEL: ga-wms-ops
+      #     SLACK_ICON: "https://github.com/docker.png?size=48"
+      #     SLACK_COLOR: "#482de1"
+      #     SLACK_MESSAGE: Geobase Runner Scan failure
+      #     SLACK_TITLE: CVE Scan alert
+      #     SLACK_USERNAME: GEOBASE Runner Scan
+      #     SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
 
-      - name: pull the wheels image
-        id: wheels_docker_pull
-        run: |
-          docker pull "${{ env.WHEELS_IMAGE_NAME }}"
+      # - name: pull the wheels image
+      #   id: wheels_docker_pull
+      #   run: |
+      #     docker pull "${{ env.WHEELS_IMAGE_NAME }}"
 
-      - name: Run vulnerability scanner
-        if: github.event_name != 'release'
-        uses: aquasecurity/trivy-action@0.0.8
-        continue-on-error: true
-        id: wheels_scan
-        with:
-          image-ref: "${{ env.WHEELS_IMAGE_NAME }}"
-          format: "table"
-          exit-code: "1"
-          severity: "CRITICAL,HIGH"
+      # - name: Run vulnerability scanner
+      #   if: github.event_name != 'release'
+      #   uses: aquasecurity/trivy-action@0.0.8
+      #   continue-on-error: true
+      #   id: wheels_scan
+      #   with:
+      #     image-ref: "${{ env.WHEELS_IMAGE_NAME }}"
+      #     format: "table"
+      #     exit-code: "1"
+      #     severity: "CRITICAL,HIGH"
 
-      - name: Notify Slack for Failures
-        uses: rtCamp/action-slack-notify@v2.1.0
-        if: steps.runner.outcome != 'success'
-        id: wheels_slack
-        env:
-          SLACK_CHANNEL: ga-wms-ops
-          SLACK_ICON: "https://github.com/docker.png?size=48"
-          SLACK_COLOR: "#482de1"
-          SLACK_MESSAGE: Geobase Wheels Scan failure
-          SLACK_TITLE: CVE Scan alert
-          SLACK_USERNAME: GEOBASE Wheels Scan
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      # - name: Notify Slack for Failures
+      #   uses: rtCamp/action-slack-notify@v2.1.0
+      #   if: steps.runner.outcome != 'success'
+      #   id: wheels_slack
+      #   env:
+      #     SLACK_CHANNEL: ga-wms-ops
+      #     SLACK_ICON: "https://github.com/docker.png?size=48"
+      #     SLACK_COLOR: "#482de1"
+      #     SLACK_MESSAGE: Geobase Wheels Scan failure
+      #     SLACK_TITLE: CVE Scan alert
+      #     SLACK_USERNAME: GEOBASE Wheels Scan
+      #     SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
       # - name: steps
       #   id: steps_id
