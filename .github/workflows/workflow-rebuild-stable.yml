@@ -1,0 +1,27 @@
+name: Rebuild Stable
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Rebuild Stable'
+        default: 'stable'
+        required: true
+
+env:
+  ORG: opendatacube
+  IMAGE: geobase
+  V: 3.0.4
+
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Base Image (builder)
+      run: |
+        docker build --tag ${ORG}/${IMAGE}:builder-${V} ./base/builder
+
