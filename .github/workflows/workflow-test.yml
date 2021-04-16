@@ -1,0 +1,22 @@
+name: Test hidden secrets
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Test secrets'
+        default: 'master'
+        required: true
+
+
+jobs:
+  release:
+    - name: With secret
+      env:
+        MYSECRET: ${{ secrets.MYSECRET }}
+      run: |
+        echo ${{MYSECRET}}
+
+    - name: Without secret
+      run: |
+        echo ${{MYSECRET}}
