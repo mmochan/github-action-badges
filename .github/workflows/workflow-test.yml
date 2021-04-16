@@ -18,6 +18,7 @@ jobs:
           MYSECRET: ${{ secrets.MYSECRET }}
         run: |
           env
+          echo ${{ secrets.MYSECRET }}
 
       - name: Without secret
         run: |
