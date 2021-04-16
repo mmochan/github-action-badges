@@ -11,12 +11,13 @@ on:
 
 jobs:
   release:
-    - name: With secret
-      env:
-        MYSECRET: ${{ secrets.MYSECRET }}
-      run: |
-        echo ${{MYSECRET}}
+    steps:
+      - name: With secret
+        env:
+          MYSECRET: ${{ secrets.MYSECRET }}
+        run: |
+          env
 
-    - name: Without secret
-      run: |
-        echo ${{MYSECRET}}
+      - name: Without secret
+        run: |
+          env
